@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./app
+    ports:
+      - "2000:3000"
+    depends_on:
+      - mongo
+    networks:
+      - johnnetwork
+
+  mongo:
+    image: mongo:4.2
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - johnnetwork
+
+  monitor:
+    build: ./monitor
+    depends_on:
+      - app
+      - mongo
+    networks:
+      - johnnetwork
+
+networks:
+  johnnetwork:
+    driver: bridge
+
+volumes:
+  mongo-data:
